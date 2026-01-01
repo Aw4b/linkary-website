@@ -1,0 +1,570 @@
+<html lang="en" class="scroll-smooth"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linkary - Connecting Brands with Creators</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-color: #0f172a;
+            overflow-x: hidden;
+            color: white;
+        }
+
+        /* 3D Background Container */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: blur(5px);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+        }
+
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-500 { transition-delay: 500ms; }
+
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-header {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-blue-500/30">
+
+    <!-- 3D Scene Background -->
+    <div id="canvas-container"></div>
+
+    <!-- Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-header transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center gap-2.5 cursor-pointer group">
+                <div class="relative w-6 h-6 flex items-center justify-center">
+                    <i data-lucide="link" class="text-blue-400 w-5 h-5 group-hover:text-blue-300 transition-colors" stroke-width="1.5"></i>
+                </div>
+                <span class="text-lg font-medium tracking-tight text-white group-hover:text-white/90 transition-colors">Linkary</span>
+            </div>
+            
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-white/60">
+                <a href="#how-it-works" class="hover:text-white transition-colors duration-200">How it works</a>
+                <a href="#for-brands" class="hover:text-white transition-colors duration-200">For Brands</a>
+                <a href="#for-creators" class="hover:text-white transition-colors duration-200">For Creators</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <button class="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white text-xs font-medium hover:bg-white/10 transition-all duration-200 backdrop-blur-md">
+                    Join the waitlist
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="relative z-10 w-full">
+        
+        <!-- Hero Section -->
+        <section class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20 relative overflow-hidden">
+            <!-- Ambient Glow -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/10 blur-[100px] rounded-full pointer-events-none"></div>
+
+            <div class="reveal inline-flex items-center gap-2 px-3 py-1 mb-8 text-xs font-medium text-blue-200/90 bg-blue-500/5 border border-blue-500/10 rounded-full backdrop-blur-sm">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-400"></span>
+                </span>
+                <span class="tracking-wide">Partnerships reimagined</span>
+            </div>
+            
+            <h1 class="reveal delay-100 text-5xl md:text-7xl lg:text-8xl font-medium tracking-tighter mb-8 leading-[1.1] md:leading-[1] text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/50 max-w-4xl">
+                Connecting Brands <br> with Creators
+            </h1>
+            
+            <p class="reveal delay-200 text-lg md:text-xl text-white/50 font-normal leading-relaxed max-w-xl mb-12 tracking-wide">
+                The modern workspace for meaningful influencer partnerships. Transparent, curated, and built for long-term growth.
+            </p>
+
+            <div class="reveal delay-300 flex flex-col sm:flex-row gap-4 w-full sm:w-auto items-center justify-center">
+                <button class="group flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-medium text-black bg-white rounded-full hover:bg-gray-200 transition-all duration-200 min-w-[160px]">
+                    For Brands
+                    <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1" stroke-width="1.5"></i>
+                </button>
+                <button class="flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-medium text-white bg-white/5 border border-white/10 rounded-full backdrop-blur-md hover:bg-white/10 transition-all duration-200 min-w-[160px]">
+                    For Creators
+                </button>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-xs text-white/30 font-medium animate-pulse">
+                <span>Scroll to explore</span>
+                <i data-lucide="chevron-down" class="w-4 h-4" stroke-width="1.5"></i>
+            </div>
+        </section>
+
+        <!-- Who is Linkary For? -->
+        <section id="for-brands" class="py-32 px-6 border-t border-white/5 bg-gradient-to-b from-[#0f172a] to-black/40 backdrop-blur-sm relative z-10">
+            <div class="max-w-7xl mx-auto">
+                <div class="mb-16 reveal text-center md:text-left">
+                    <h2 class="text-3xl md:text-4xl font-medium tracking-tight mb-4 text-white">Who is Linkary for?</h2>
+                    <p class="text-white/50 text-sm md:text-base max-w-lg leading-relaxed">
+                        We are building a specialized network, not a mass marketplace.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                    <!-- Brands Column -->
+                    <div class="reveal delay-100 p-10 rounded-3xl glass-panel group hover:border-blue-500/30 transition-all duration-500">
+                        <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center mb-8 text-blue-400 group-hover:scale-110 transition-transform duration-300">
+                            <i data-lucide="briefcase" class="w-6 h-6" stroke-width="1.5"></i>
+                        </div>
+                        <h3 class="text-2xl font-medium mb-6 tracking-tight">For Brands</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3 text-white/60">
+                                <i data-lucide="check" class="w-5 h-5 text-blue-400 mt-0.5 shrink-0" stroke-width="1.5"></i>
+                                <span class="leading-relaxed">DTC brands scaling influencer spend</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-white/60">
+                                <i data-lucide="check" class="w-5 h-5 text-blue-400 mt-0.5 shrink-0" stroke-width="1.5"></i>
+                                <span class="leading-relaxed">Teams tired of manual cold outreach</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-white/60">
+                                <i data-lucide="check" class="w-5 h-5 text-blue-400 mt-0.5 shrink-0" stroke-width="1.5"></i>
+                                <span class="leading-relaxed">Focus on long-term creator relationships</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Creators Column -->
+                    <div class="reveal delay-200 p-10 rounded-3xl glass-panel group hover:border-amber-500/30 transition-all duration-500">
+                        <div class="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center mb-8 text-amber-400 group-hover:scale-110 transition-transform duration-300">
+                            <i data-lucide="camera" class="w-6 h-6" stroke-width="1.5"></i>
+                        </div>
+                        <h3 class="text-2xl font-medium mb-6 tracking-tight">For Creators</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3 text-white/60">
+                                <i data-lucide="check" class="w-5 h-5 text-amber-400 mt-0.5 shrink-0" stroke-width="1.5"></i>
+                                <span class="leading-relaxed">Mid to high-quality content creators</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-white/60">
+                                <i data-lucide="check" class="w-5 h-5 text-amber-400 mt-0.5 shrink-0" stroke-width="1.5"></i>
+                                <span class="leading-relaxed">Those who value fair pay &amp; clear terms</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-white/60">
+                                <i data-lucide="check" class="w-5 h-5 text-amber-400 mt-0.5 shrink-0" stroke-width="1.5"></i>
+                                <span class="leading-relaxed">Looking for fewer, higher quality deals</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Problem / Why Now -->
+        <section class="py-32 px-6 border-t border-white/5 bg-black/60 backdrop-blur-md relative z-10">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                    <div class="lg:col-span-4 reveal">
+                        <h2 class="text-3xl font-medium tracking-tight mb-6">Why Linkary?</h2>
+                        <p class="text-white/50 leading-relaxed mb-8">
+                            Influencer marketing is fragmented. Spreadsheets, DMs, and payment delays kill momentum. We built the infrastructure to fix it.
+                        </p>
+                    </div>
+                    
+                    <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <!-- Feature 1 -->
+                        <div class="reveal delay-100 p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                            <i data-lucide="layers" class="text-white/70 w-6 h-6 mb-4" stroke-width="1.5"></i>
+                            <h4 class="text-base font-medium text-white mb-2">Fragmented Workflows</h4>
+                            <p class="text-sm text-white/50 leading-relaxed">
+                                No more jumping between email, Excel, and PayPal. Handle everything in one workspace.
+                            </p>
+                        </div>
+                        <!-- Feature 2 -->
+                        <div class="reveal delay-200 p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                            <i data-lucide="shield-check" class="text-white/70 w-6 h-6 mb-4" stroke-width="1.5"></i>
+                            <h4 class="text-base font-medium text-white mb-2">Vetted Quality</h4>
+                            <p class="text-sm text-white/50 leading-relaxed">
+                                We manually verify every creator and brand to ensure high-intent partnerships.
+                            </p>
+                        </div>
+                        <!-- Feature 3 -->
+                        <div class="reveal delay-300 p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                            <i data-lucide="zap" class="text-white/70 w-6 h-6 mb-4" stroke-width="1.5"></i>
+                            <h4 class="text-base font-medium text-white mb-2">Fast Activation</h4>
+                            <p class="text-sm text-white/50 leading-relaxed">
+                                From discovery to signed contract in hours, not weeks.
+                            </p>
+                        </div>
+                        <!-- Feature 4 -->
+                        <div class="reveal delay-500 p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                            <i data-lucide="credit-card" class="text-white/70 w-6 h-6 mb-4" stroke-width="1.5"></i>
+                            <h4 class="text-base font-medium text-white mb-2">Guaranteed Payments</h4>
+                            <p class="text-sm text-white/50 leading-relaxed">
+                                Creators get paid on time. Brands get the content they paid for.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Linkary / Values -->
+        <section class="py-40 px-6 border-t border-white/5 bg-black relative overflow-hidden z-10">
+             <!-- Background Glow -->
+             <div class="absolute bottom-0 right-0 w-[800px] h-[800px] bg-blue-600/5 blur-[120px] rounded-full pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10">
+                
+                <!-- Left: Mission Card -->
+                <div class="reveal">
+                    <div class="glass-panel p-10 md:p-12 rounded-3xl relative overflow-hidden border border-white/10 shadow-2xl shadow-blue-900/10">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-amber-500"></div>
+                        
+                        <div class="mb-8">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-blue-400 mb-2 block">Our Mission</span>
+                            <h2 class="text-3xl md:text-4xl font-medium tracking-tight text-white mb-6">
+                                To make creator partnerships the most reliable growth channel for brands.
+                            </h2>
+                            <p class="text-white/60 text-lg leading-relaxed">
+                                Linkary exists to remove the friction from collaboration. We believe that when you align incentives and simplify the process, creativity flourishes and businesses grow.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-6 pt-8 border-t border-white/10">
+                            <div>
+                                <div class="text-2xl font-medium text-white mb-1">100%</div>
+                                <div class="text-xs text-white/40 uppercase tracking-wide">Verified</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-medium text-white mb-1">0%</div>
+                                <div class="text-xs text-white/40 uppercase tracking-wide">Hidden Fees</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-medium text-white mb-1">24/7</div>
+                                <div class="text-xs text-white/40 uppercase tracking-wide">Support</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Values (Updated Design) -->
+                <div class="reveal delay-200 pl-0 lg:pl-10">
+                    <div class="flex items-center justify-between mb-8">
+                        <span class="text-sm font-semibold text-white/40 tracking-wider uppercase">Our Values</span>
+                        <div class="h-px w-20 bg-white/10"></div>
+                    </div>
+                    
+                    <div class="space-y-5">
+                        <!-- Value 1: Clarity (Blue) -->
+                        <div class="group relative p-6 rounded-2xl bg-gradient-to-br from-white/[0.03] to-transparent border border-white/5 hover:border-blue-500/30 transition-all duration-300 hover:scale-[1.02] hover:bg-white/[0.05]">
+                            <div class="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-500 blur-xl"></div>
+                            
+                            <div class="relative flex items-start gap-5">
+                                <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/10 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-blue-500/20 transition-all duration-300">
+                                    <i data-lucide="sun" class="w-5 h-5 text-blue-400" stroke-width="1.5"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold text-white tracking-tight mb-2 group-hover:text-blue-100 transition-colors">Clarity</h3>
+                                    <p class="text-white/60 text-sm leading-relaxed max-w-sm">
+                                        No fine print. Transparent pricing. Simple workflows that respect your time.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Value 2: Quality (Purple/Violet) -->
+                        <div class="group relative p-6 rounded-2xl bg-gradient-to-br from-white/[0.03] to-transparent border border-white/5 hover:border-violet-500/30 transition-all duration-300 hover:scale-[1.02] hover:bg-white/[0.05]">
+                            <div class="absolute inset-0 bg-violet-500/5 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-500 blur-xl"></div>
+                            
+                            <div class="relative flex items-start gap-5">
+                                <div class="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/10 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-violet-500/20 transition-all duration-300">
+                                    <i data-lucide="diamond" class="w-5 h-5 text-violet-400" stroke-width="1.5"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold text-white tracking-tight mb-2 group-hover:text-violet-100 transition-colors">Quality</h3>
+                                    <p class="text-white/60 text-sm leading-relaxed max-w-sm">
+                                        We prioritize meaningful partnerships over volume. Every match should feel right.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Value 3: Performance (Emerald) -->
+                        <div class="group relative p-6 rounded-2xl bg-gradient-to-br from-white/[0.03] to-transparent border border-white/5 hover:border-emerald-500/30 transition-all duration-300 hover:scale-[1.02] hover:bg-white/[0.05]">
+                            <div class="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-500 blur-xl"></div>
+                            
+                            <div class="relative flex items-start gap-5">
+                                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/10 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-emerald-500/20 transition-all duration-300">
+                                    <i data-lucide="trending-up" class="w-5 h-5 text-emerald-400" stroke-width="1.5"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold text-white tracking-tight mb-2 group-hover:text-emerald-100 transition-colors">Performance</h3>
+                                    <p class="text-white/60 text-sm leading-relaxed max-w-sm">
+                                        We focus on real business impact, not vanity metrics.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-20 px-6 border-t border-white/5 bg-black relative z-10">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20 reveal">
+                    <div class="col-span-1 md:col-span-1 flex flex-col gap-4">
+                        <div class="flex items-center gap-2">
+                             <div class="relative w-5 h-5 flex items-center justify-center">
+                                <i data-lucide="link" class="text-blue-400 w-4 h-4" stroke-width="1.5"></i>
+                            </div>
+                            <span class="text-base font-medium tracking-tight">Linkary</span>
+                        </div>
+                        <p class="text-xs text-white/40 max-w-xs leading-relaxed">
+                            The operating system for creator partnerships.
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-xs font-medium text-white mb-4 uppercase tracking-wider">Platform</h4>
+                        <ul class="space-y-3 text-xs text-white/40">
+                            <li><a href="#" class="hover:text-white transition-colors">For Brands</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors">For Creators</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors">Pricing</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs font-medium text-white mb-4 uppercase tracking-wider">Company</h4>
+                        <ul class="space-y-3 text-xs text-white/40">
+                            <li><a href="#" class="hover:text-white transition-colors">Manifesto</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-xs font-medium text-white mb-4 uppercase tracking-wider">Connect</h4>
+                        <div class="flex gap-4">
+                            <a href="#" class="text-white/40 hover:text-white transition-colors"><i data-lucide="twitter" class="w-4 h-4" stroke-width="1.5"></i></a>
+                            <a href="#" class="text-white/40 hover:text-white transition-colors"><i data-lucide="linkedin" class="w-4 h-4" stroke-width="1.5"></i></a>
+                            <a href="#" class="text-white/40 hover:text-white transition-colors"><i data-lucide="instagram" class="w-4 h-4" stroke-width="1.5"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-white/20 reveal delay-100">
+                    <p>© 2024 Linkary Inc. All rights reserved.</p>
+                    <div class="flex gap-6 mt-4 md:mt-0">
+                        <a href="#" class="hover:text-white/40">Privacy Policy</a>
+                        <a href="#" class="hover:text-white/40">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Logic -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // --- Intersection Observer for Scroll Animations ---
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // --- Three.js Network Globe Animation ---
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        
+        // Deep background fog to blend the edges of the globe into the page background
+        scene.fog = new THREE.FogExp2(0x0f172a, 0.045);
+
+        const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 25; // Adjusted to frame the globe nicely behind content
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        // Group to hold all globe elements
+        const globeGroup = new THREE.Group();
+        scene.add(globeGroup);
+
+        // Base Geometry for the Globe (Icosahedron gives that geodesic network look)
+        // Detail level 3 creates enough vertices for a dense network but keeps it performant
+        const geometry = new THREE.IcosahedronGeometry(11, 2);
+
+        // 1. The Wireframe Connections
+        // Using LineBasicMaterial for crisp, vector-like lines
+        const wireframeMaterial = new THREE.LineBasicMaterial({
+            color: 0x93c5fd, // Light blue (tailwind blue-300)
+            transparent: true,
+            opacity: 0.12
+        });
+        const wireframe = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), wireframeMaterial);
+        globeGroup.add(wireframe);
+
+        // 2. The Nodes (Dots)
+        // Extract vertices from the geometry to place points
+        const pointsMaterial = new THREE.PointsMaterial({
+            color: 0xffffff,
+            size: 0.12,
+            sizeAttenuation: true,
+            transparent: true,
+            opacity: 0.8
+        });
+        // We need to use the position attribute from the geometry
+        const pointsGeometry = new THREE.BufferGeometry();
+        pointsGeometry.setAttribute('position', geometry.getAttribute('position'));
+        const points = new THREE.Points(pointsGeometry, pointsMaterial);
+        globeGroup.add(points);
+
+        // 3. Inner Sphere (Occluder)
+        // This is a black sphere slightly smaller than the wireframe. 
+        // It blocks lines on the back side of the sphere from being seen, making it look like a solid object
+        // and reducing visual clutter.
+        const fillMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0x0f172a 
+        });
+        const fillSphere = new THREE.Mesh(geometry, fillMaterial);
+        fillSphere.scale.set(0.98, 0.98, 0.98); // Slightly smaller to sit inside lines
+        globeGroup.add(fillSphere);
+
+        // Add some ambient particles floating around for depth
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 200;
+        const posArray = new Float32Array(particlesCount * 3);
+        
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 60; // Spread wide
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0x60a5fa,
+            transparent: true,
+            opacity: 0.4
+        });
+        const particleMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particleMesh);
+
+        // Animation Variables
+        let time = 0;
+        
+        // Handle Scroll for Rotation
+        let scrollY = 0;
+        window.addEventListener('scroll', () => {
+            scrollY = window.scrollY;
+        });
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.002;
+
+            // Base Rotation (Automatic)
+            globeGroup.rotation.y += 0.0005;
+            globeGroup.rotation.x = Math.sin(time * 0.5) * 0.1; // Gentle sway
+
+            // Scroll Interaction: Rotate faster when scrolling down
+            const targetRotation = scrollY * 0.0005;
+            globeGroup.rotation.y += targetRotation * 0.05; // Add scroll influence
+            
+            // Pulse Effect: Slight scale breathing
+            const scale = 1 + Math.sin(time * 2) * 0.01;
+            globeGroup.scale.set(scale, scale, scale);
+
+            // Floating particles animation
+            particleMesh.rotation.y = -time * 0.1;
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Responsive Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // Initial fade in of the canvas
+        container.style.transition = 'opacity 2s ease';
+        setTimeout(() => {
+            container.style.opacity = '1';
+        }, 100);
+
+    </script>
+
+</body></html>
