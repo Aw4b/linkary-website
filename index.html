@@ -1,594 +1,653 @@
-<html lang="en" class="scroll-smooth"><head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linkary - Connecting Brands with Creators</title>
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <!-- Three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linkary - The Operating System for Creator Partnerships</title>
+<!-- Fonts: Inter -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<!-- Three.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+fontFamily: {
+sans: ['Inter', 'sans-serif'],
+},
+colors: {
+brand: {
+50: '#f0f9ff',
+100: '#e0f2fe',
+500: '#0ea5e9',
+600: '#0284c7',
+900: '#0c4a6e',
+},
+zinc: {
+850: '#1f1f22',
+}
+},
+animation: {
+'fade-in': 'fadeIn 1s ease-out forwards',
+'slide-up': 'slideUp 0.8s ease-out forwards',
+'float-slow': 'float 6s ease-in-out infinite',
+'float-medium': 'float 5s ease-in-out infinite',
+'float-fast': 'float 4s ease-in-out infinite',
+'gradient-x': 'gradientX 15s ease infinite',
+},
+keyframes: {
+fadeIn: {
+'0%': { opacity: '0' },
+'100%': { opacity: '1' },
+},
+slideUp: {
+'0%': { opacity: '0', transform: 'translateY(20px)' },
+'100%': { opacity: '1', transform: 'translateY(0)' },
+},
+float: {
+'0%, 100%': { transform: 'translateY(0)' },
+'50%': { transform: 'translateY(-20px)' },
+},
+gradientX: {
+'0%, 100%': {
+'background-size': '200% 200%',
+'background-position': 'left center'
+},
+'50%': {
+'background-size': '200% 200%',
+'background-position': 'right center'
+},
+},
+}
+}
+}
+}
+</script>
+<style>
+body {
+font-family: 'Inter', sans-serif;
+background-color: #ffffff;
+color: #171717;
+overflow-x: hidden;
+-webkit-font-smoothing: antialiased;
+}
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #e5e5e5; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #a3a3a3; }
+/* Extremely subtle grid background */
+.bg-grid {
+background-size: 40px 40px;
+background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
+linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
+mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+-webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+}
+/* Aurora Gradient Background */
+.aurora-bg {
+background: linear-gradient(-45deg, #f0f9ff, #e0f2fe, #fdfbf7, #ffffff);
+background-size: 400% 400%;
+animation: gradientX 15s ease infinite;
+}
+.glass-card {
+background: rgba(255, 255, 255, 0.7);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.5);
+}
+</style>
+<style>
+/* 3D Transform utilities */
+</style></head>
+<body class="antialiased text-lg leading-relaxed text-zinc-600 selection:bg-brand-100 selection:text-brand-900">
 
-    <style>
-        :root {
-            /* Palette Definition */
-            --bg-color: #0B1220;
-            --text-primary: #F1F5F9; /* Off-white */
-            --text-secondary: #94A3B8; /* Muted Blue Gray */
-            --accent-color: #4F8CFF;
-        }
+    <!-- Background Pattern -->
+    <div class="fixed inset-0 z-0 bg-grid pointer-events-none h-screen w-full"></div>
 
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            background-color: var(--bg-color);
-            overflow-x: hidden;
-            color: var(--text-primary);
-        }
-
-        /* 3D Background Container */
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 1; 
-        }
-
-        /* Animations */
-        .reveal {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
-            filter: blur(5px);
-        }
-        
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-            filter: blur(0);
-        }
-
-        .delay-100 { transition-delay: 100ms; }
-        .delay-200 { transition-delay: 200ms; }
-        .delay-300 { transition-delay: 300ms; }
-        .delay-500 { transition-delay: 500ms; }
-
-        /* Glassmorphism Utilities */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        /* Floating Nav Style */
-        .floating-nav {
-            background: rgba(11, 18, 32, 0.6); /* High transparency */
-            backdrop-filter: blur(12px); /* Smooth blur */
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06); /* Very subtle border */
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-color);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1e293b;
-            border-radius: 3px;
-        }
-    </style>
-</head>
-<body class="antialiased selection:bg-[#4F8CFF]/30">
-
-    <!-- 3D Scene Background -->
-    <div id="canvas-container"></div>
-
-    <!-- Navigation -->
-    <header class="fixed top-0 left-0 right-0 z-50 floating-nav transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 border-b border-zinc-200/80 bg-white/80 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <!-- Logo -->
-            <div class="flex items-center gap-2.5 cursor-pointer group">
-                <div class="relative w-6 h-6 flex items-center justify-center">
-                    <i data-lucide="link" class="text-[#4F8CFF] w-5 h-5 group-hover:text-[#5DA9FF] transition-colors" stroke-width="1.5"></i>
-                </div>
-                <span class="text-lg font-medium tracking-tight text-[#F1F5F9] group-hover:opacity-90 transition-opacity">Linkary</span>
-            </div>
-            
-            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-[#94A3B8]">
-                <a href="#how-it-works" class="hover:text-[#F1F5F9] transition-colors duration-200">How it works</a>
-                <a href="#for-brands" class="hover:text-[#F1F5F9] transition-colors duration-200">For Brands</a>
-                <a href="#for-creators" class="hover:text-[#F1F5F9] transition-colors duration-200">For Creators</a>
-            </nav>
+            <a href="#" class="flex items-center gap-2 group">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-brand-600">
+                    <path d="M10 13C10.4293 13.5739 10.9785 14.0494 11.6092 14.3934C12.24 14.7374 12.9373 14.9416 13.6525 14.9918C14.3677 15.0421 15.084 14.9372 15.7513 14.6845C16.4187 14.4318 17.0209 14.0374 17.516 13.528L19.808 11.236C20.8034 10.1983 21.3503 8.81229 21.3308 7.37766C21.3113 5.94303 20.7269 4.57242 19.7041 3.56191C18.6812 2.55141 17.2954 1.98064 15.8608 1.98064C14.4262 1.98064 13.0404 2.55141 12.0175 3.56191L10.925 4.647" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M14 11C13.5707 10.4261 13.0215 9.95062 12.3908 9.60656C11.76 9.26251 11.0627 9.05835 10.3475 9.00815C9.63231 8.95795 8.91599 9.06283 8.24867 9.31549C7.58136 9.56815 6.97906 9.96263 6.484 10.472L4.192 12.764C3.19661 13.8017 2.64972 15.1877 2.66922 16.6223C2.68871 18.057 3.2731 19.4276 4.29593 20.4381C5.31876 21.4486 6.70461 22.0194 8.13922 22.0194C9.57383 22.0194 10.9597 21.4486 11.9825 20.4381L13.075 19.353" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <span class="font-semibold text-lg tracking-tight text-zinc-900">Linkary</span>
+            </a>
 
-            <div class="flex items-center gap-4">
-                <button class="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-[#F1F5F9] text-xs font-medium hover:bg-white/10 transition-all duration-200 backdrop-blur-md">
-                    Join the waitlist
-                </button>
+            <!-- Desktop Links -->
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#how-it-works" class="text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors">How it works</a>
+                <a href="#brands" class="text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors">For Brands</a>
+                <a href="#creators" class="text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors">For Creators</a>
             </div>
+
+            <!-- CTA -->
+            <a href="#" class="bg-zinc-900 hover:bg-zinc-800 text-white text-sm font-medium px-5 py-2.5 rounded-full transition-all shadow-sm">
+                Join waitlist
+            </a>
         </div>
-    </header>
+    </nav>
 
     <!-- Main Content -->
-    <main class="relative z-10 w-full">
+    <main class="relative z-10 pt-32 pb-20">
         
         <!-- Hero Section -->
-        <section class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20 relative overflow-hidden">
-            
-            <!-- Dark Radial Gradient for Text Readability -->
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#0B1220] via-[#0B1220]/60 to-transparent pointer-events-none z-0"></div>
-
-            <!-- Ambient Glow -->
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#4F8CFF]/5 blur-[120px] rounded-full pointer-events-none z-0"></div>
-
-            <div class="relative z-10 flex flex-col items-center">
-                <div class="reveal inline-flex items-center gap-2 px-3 py-1 mb-8 text-xs font-medium text-[#4F8CFF] bg-[#4F8CFF]/10 border border-[#4F8CFF]/20 rounded-full backdrop-blur-sm">
-                    <span class="relative flex h-2 w-2">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4F8CFF] opacity-75"></span>
-                      <span class="relative inline-flex rounded-full h-2 w-2 bg-[#4F8CFF]"></span>
-                    </span>
-                    <span class="tracking-wide text-blue-200">Partnerships reimagined</span>
-                </div>
+        <section class="max-w-7xl mx-auto px-6 mb-32">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
                 
-                <!-- Headline -->
-                <h1 class="reveal delay-100 text-5xl md:text-7xl lg:text-8xl font-medium tracking-tighter mb-8 leading-[1.1] md:leading-[1] text-slate-100 max-w-4xl drop-shadow-2xl">
-                    Connecting Brands <br> 
-                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-100 to-blue-400">with Creators</span>
-                </h1>
-                
-                <!-- Paragraph -->
-                <p class="reveal delay-200 text-lg md:text-xl text-slate-400 font-normal leading-relaxed max-w-xl mb-12 tracking-wide drop-shadow-lg">
-                    The modern workspace for meaningful influencer partnerships. Transparent, curated, and built for long-term growth.
-                </p>
-
-                <div class="reveal delay-300 flex flex-col sm:flex-row gap-4 w-full sm:w-auto items-center justify-center">
-                    <button class="group flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-medium text-[#0B1220] bg-[#F1F5F9] rounded-full hover:bg-white transition-all duration-200 min-w-[160px] shadow-lg shadow-blue-500/10">
-                        For Brands
-                        <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1" stroke-width="1.5"></i>
-                    </button>
-                    <button class="flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-medium text-[#F1F5F9] bg-white/5 border border-white/10 rounded-full backdrop-blur-md hover:bg-white/10 transition-all duration-200 min-w-[160px]">
-                        For Creators
-                    </button>
-                </div>
-            </div>
-
-            <!-- Scroll Indicator -->
-            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-xs text-[#94A3B8] font-medium animate-pulse z-20">
-                <span>Scroll to explore</span>
-                <i data-lucide="chevron-down" class="w-4 h-4" stroke-width="1.5"></i>
-            </div>
-        </section>
-
-        <!-- Who is Linkary For? -->
-        <section id="for-brands" class="py-32 px-6 border-t border-white/5 bg-gradient-to-b from-[#0B1220] to-[#050914] backdrop-blur-sm relative z-10">
-            <div class="max-w-7xl mx-auto">
-                <div class="mb-16 reveal text-center md:text-left">
-                    <h2 class="text-3xl md:text-4xl font-medium tracking-tight mb-4 text-[#F1F5F9]">Who is Linkary for?</h2>
-                    <p class="text-[#94A3B8] text-sm md:text-base max-w-lg leading-relaxed">
-                        We are building a specialized network, not a mass marketplace.
+                <!-- Left: Content -->
+                <div class="animate-slide-up opacity-0 text-left" style="animation-delay: 0.1s;">
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-semibold text-zinc-900 tracking-tighter leading-[1.1] mb-8">
+                        Connecting Great Brands <br class="hidden xl:block"> with Top Creators
+                    </h1>
+                    <p class="text-xl text-zinc-500 font-light max-w-lg leading-relaxed mb-0">
+                        The operating system for creator partnerships. Streamline discovery, payments, and workflow in one unified platform.
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                    <!-- Brands Column -->
-                    <div class="reveal delay-100 p-10 rounded-3xl glass-panel group hover:border-[#4F8CFF]/30 transition-all duration-500">
-                        <div class="w-12 h-12 rounded-full bg-[#4F8CFF]/10 flex items-center justify-center mb-8 text-[#4F8CFF] group-hover:scale-110 transition-transform duration-300">
-                            <i data-lucide="briefcase" class="w-6 h-6" stroke-width="1.5"></i>
-                        </div>
-                        <h3 class="text-2xl font-medium mb-6 tracking-tight text-[#F1F5F9]">For Brands</h3>
-                        <ul class="space-y-4">
-                            <li class="flex items-start gap-3 text-[#94A3B8]">
-                                <i data-lucide="check" class="w-5 h-5 text-[#4F8CFF] mt-0.5 shrink-0" stroke-width="1.5"></i>
-                                <span class="leading-relaxed">DTC brands scaling influencer spend</span>
-                            </li>
-                            <li class="flex items-start gap-3 text-[#94A3B8]">
-                                <i data-lucide="check" class="w-5 h-5 text-[#4F8CFF] mt-0.5 shrink-0" stroke-width="1.5"></i>
-                                <span class="leading-relaxed">Teams tired of manual cold outreach</span>
-                            </li>
-                            <li class="flex items-start gap-3 text-[#94A3B8]">
-                                <i data-lucide="check" class="w-5 h-5 text-[#4F8CFF] mt-0.5 shrink-0" stroke-width="1.5"></i>
-                                <span class="leading-relaxed">Focus on long-term creator relationships</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Creators Column -->
-                    <div class="reveal delay-200 p-10 rounded-3xl glass-panel group hover:border-amber-500/30 transition-all duration-500">
-                        <div class="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center mb-8 text-amber-400 group-hover:scale-110 transition-transform duration-300">
-                            <i data-lucide="camera" class="w-6 h-6" stroke-width="1.5"></i>
-                        </div>
-                        <h3 class="text-2xl font-medium mb-6 tracking-tight text-[#F1F5F9]">For Creators</h3>
-                        <ul class="space-y-4">
-                            <li class="flex items-start gap-3 text-[#94A3B8]">
-                                <i data-lucide="check" class="w-5 h-5 text-amber-400 mt-0.5 shrink-0" stroke-width="1.5"></i>
-                                <span class="leading-relaxed">Mid to high-quality content creators</span>
-                            </li>
-                            <li class="flex items-start gap-3 text-[#94A3B8]">
-                                <i data-lucide="check" class="w-5 h-5 text-amber-400 mt-0.5 shrink-0" stroke-width="1.5"></i>
-                                <span class="leading-relaxed">Those who value fair pay &amp; clear terms</span>
-                            </li>
-                            <li class="flex items-start gap-3 text-[#94A3B8]">
-                                <i data-lucide="check" class="w-5 h-5 text-amber-400 mt-0.5 shrink-0" stroke-width="1.5"></i>
-                                <span class="leading-relaxed">Looking for fewer, higher quality deals</span>
-                            </li>
-                        </ul>
-                    </div>
+                <!-- Right: 3D Visual -->
+                <div class="relative w-full h-[400px] md:h-[500px] lg:h-[600px] rounded-3xl overflow-hidden bg-zinc-50 border border-zinc-100 shadow-inner flex items-center justify-center animate-fade-in opacity-0" style="animation-delay: 0.3s;">
+                    <div id="canvas-container" class="absolute inset-0 w-full h-full"></div>
                 </div>
             </div>
         </section>
 
-        <!-- Problem / Why Now -->
-        <section class="py-32 px-6 border-t border-white/5 bg-[#050914]/60 backdrop-blur-md relative z-10">
-            <div class="max-w-7xl mx-auto">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-                    <div class="lg:col-span-4 reveal">
-                        <h2 class="text-3xl font-medium tracking-tight mb-6 text-[#F1F5F9]">Why Linkary?</h2>
-                        <p class="text-[#94A3B8] leading-relaxed mb-8">
-                            Influencer marketing is fragmented. Spreadsheets, DMs, and payment delays kill momentum. We built the infrastructure to fix it.
-                        </p>
-                    </div>
-                    
-                    <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <!-- Feature 1 -->
-                        <div class="reveal delay-100 p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
-                            <i data-lucide="layers" class="text-[#F1F5F9]/70 w-6 h-6 mb-4" stroke-width="1.5"></i>
-                            <h4 class="text-base font-medium text-[#F1F5F9] mb-2">Fragmented Workflows</h4>
-                            <p class="text-sm text-[#94A3B8] leading-relaxed">
-                                No more jumping between email, Excel, and PayPal. Handle everything in one workspace.
-                            </p>
-                        </div>
-                        <!-- Feature 2 -->
-                        <div class="reveal delay-200 p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
-                            <i data-lucide="shield-check" class="text-[#F1F5F9]/70 w-6 h-6 mb-4" stroke-width="1.5"></i>
-                            <h4 class="text-base font-medium text-[#F1F5F9] mb-2">Vetted Quality</h4>
-                            <p class="text-sm text-[#94A3B8] leading-relaxed">
-                                We manually verify every creator and brand to ensure high-intent partnerships.
-                            </p>
-                        </div>
-                        <!-- Feature 3 -->
-                        <div class="reveal delay-300 p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
-                            <i data-lucide="zap" class="text-[#F1F5F9]/70 w-6 h-6 mb-4" stroke-width="1.5"></i>
-                            <h4 class="text-base font-medium text-[#F1F5F9] mb-2">Fast Activation</h4>
-                            <p class="text-sm text-[#94A3B8] leading-relaxed">
-                                From discovery to signed contract in hours, not weeks.
-                            </p>
-                        </div>
-                        <!-- Feature 4 -->
-                        <div class="reveal delay-500 p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
-                            <i data-lucide="credit-card" class="text-[#F1F5F9]/70 w-6 h-6 mb-4" stroke-width="1.5"></i>
-                            <h4 class="text-base font-medium text-[#F1F5F9] mb-2">Guaranteed Payments</h4>
-                            <p class="text-sm text-[#94A3B8] leading-relaxed">
-                                Creators get paid on time. Brands get the content they paid for.
-                            </p>
-                        </div>
-                    </div>
-                </div>
+        <!-- Audience Section (Who is Linkary for?) -->
+        <section class="max-w-7xl mx-auto px-6 mb-32">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-semibold text-zinc-900 tracking-tight">
+                    Who is Linkary for?
+                </h2>
             </div>
-        </section>
-
-        <!-- About Linkary / Values -->
-        <section class="py-40 px-6 border-t border-white/5 bg-[#050914] relative overflow-hidden z-10">
-             <!-- Background Glow -->
-             <div class="absolute bottom-0 right-0 w-[800px] h-[800px] bg-[#4F8CFF]/5 blur-[120px] rounded-full pointer-events-none"></div>
-
-            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10">
+            
+            <!-- Increased Gap for Breathing Room -->
+            <div class="grid md:grid-cols-2 gap-12">
                 
-                <!-- Left: Mission Card -->
-                <div class="reveal">
-                    <div class="glass-panel p-10 md:p-12 rounded-3xl relative overflow-hidden border border-white/10 shadow-2xl shadow-blue-900/10">
-                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#4F8CFF] to-[#5DA9FF]"></div>
-                        
-                        <div class="mb-8">
-                            <span class="text-xs font-semibold uppercase tracking-wider text-[#4F8CFF] mb-2 block">Our Mission</span>
-                            <h2 class="text-3xl md:text-4xl font-medium tracking-tight text-[#F1F5F9] mb-6">
-                                To make creator partnerships the most reliable growth channel for brands.
-                            </h2>
-                            <p class="text-[#94A3B8] text-lg leading-relaxed">
-                                Linkary is a creator-brand partnership agency built for today's digital world. Our mission is simple: connect great content with great companies. We work globally, and value clarity, quality, and performance.
-                            </p>
+                <!-- Card 1: Brands -->
+                <div id="brands" class="bg-white border border-zinc-200 rounded-2xl p-10 lg:p-12 hover:border-brand-500/30 hover:shadow-xl hover:shadow-brand-500/5 transition-all duration-300 group flex flex-col h-full relative z-10">
+                    <div class="flex items-start justify-between mb-10">
+                        <div class="w-14 h-14 bg-zinc-50 border border-zinc-100 rounded-xl flex items-center justify-center text-zinc-900 group-hover:bg-brand-50 group-hover:text-brand-600 group-hover:border-brand-100 transition-colors">
+                            <i data-lucide="briefcase" class="w-7 h-7 stroke-[1.5]"></i>
                         </div>
-
-                        <div class="grid grid-cols-3 gap-6 pt-8 border-t border-white/10">
-                            <div>
-                                <div class="text-2xl font-medium text-[#F1F5F9] mb-1">100+</div>
-                                <div class="text-xs text-[#94A3B8] uppercase tracking-wide">Brand Partners</div>
-                            </div>
-                            <div>
-                                <div class="text-2xl font-medium text-[#F1F5F9] mb-1">500+</div>
-                                <div class="text-xs text-[#94A3B8] uppercase tracking-wide">Creator Network</div>
-                            </div>
-                            <div>
-                                <div class="text-2xl font-medium text-[#F1F5F9] mb-1">20+</div>
-                                <div class="text-xs text-[#94A3B8] uppercase tracking-wide">Countries</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right: Values -->
-                <div class="reveal delay-200 pl-0 lg:pl-10">
-                    <div class="flex items-center justify-between mb-8">
-                        <span class="text-sm font-semibold text-[#94A3B8] tracking-wider uppercase">Our Values</span>
-                        <div class="h-px w-20 bg-white/10"></div>
+                        <span class="text-xs font-semibold uppercase tracking-wide bg-zinc-100 text-zinc-600 px-3 py-1.5 rounded-full">Scale</span>
                     </div>
                     
-                    <div class="space-y-5">
-                        <!-- Value 1: Clarity (Blue) -->
-                        <div class="group relative p-6 rounded-2xl bg-gradient-to-br from-white/[0.03] to-transparent border border-white/5 hover:border-[#4F8CFF]/30 transition-all duration-300 hover:scale-[1.02] hover:bg-white/[0.05]">
-                            <div class="absolute inset-0 bg-[#4F8CFF]/5 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-500 blur-xl"></div>
-                            
-                            <div class="relative flex items-start gap-5">
-                                <div class="w-12 h-12 rounded-xl bg-[#4F8CFF]/10 border border-[#4F8CFF]/10 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-[#4F8CFF]/20 transition-all duration-300">
-                                    <i data-lucide="sun" class="w-5 h-5 text-[#4F8CFF]" stroke-width="1.5"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-xl font-semibold text-[#F1F5F9] tracking-tight mb-2 group-hover:text-blue-100 transition-colors">Clarity</h3>
-                                    <p class="text-[#94A3B8] text-sm leading-relaxed max-w-sm">
-                                        We believe in transparent communication, clear expectations, and straightforward processes.
-                                    </p>
-                                </div>
+                    <h3 class="text-2xl font-semibold text-zinc-900 mb-4 tracking-tight">For Brands</h3>
+                    <p class="text-zinc-500 mb-10 leading-relaxed text-base">Stop managing creators in spreadsheets. Centralize your entire influencer stack in one place.</p>
+                    
+                    <ul class="space-y-5 mt-auto">
+                        <li class="flex items-start gap-4">
+                            <div class="mt-0.5 p-0.5 bg-brand-100 rounded-full flex-shrink-0">
+                                <i data-lucide="check" class="w-3.5 h-3.5 text-brand-700 stroke-[3]"></i>
                             </div>
-                        </div>
-
-                        <!-- Value 2: Quality (Purple/Violet) -->
-                        <div class="group relative p-6 rounded-2xl bg-gradient-to-br from-white/[0.03] to-transparent border border-white/5 hover:border-violet-500/30 transition-all duration-300 hover:scale-[1.02] hover:bg-white/[0.05]">
-                            <div class="absolute inset-0 bg-violet-500/5 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-500 blur-xl"></div>
-                            
-                            <div class="relative flex items-start gap-5">
-                                <div class="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/10 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-violet-500/20 transition-all duration-300">
-                                    <i data-lucide="diamond" class="w-5 h-5 text-violet-400" stroke-width="1.5"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-xl font-semibold text-[#F1F5F9] tracking-tight mb-2 group-hover:text-violet-100 transition-colors">Quality</h3>
-                                    <p class="text-[#94A3B8] text-sm leading-relaxed max-w-sm">
-                                        We prioritize meaningful partnerships over volume. Every match should feel right.
-                                    </p>
-                                </div>
+                            <span class="text-zinc-700 text-sm font-medium leading-tight pt-0.5">DTC brands scaling influencer spend</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="mt-0.5 p-0.5 bg-brand-100 rounded-full flex-shrink-0">
+                                <i data-lucide="check" class="w-3.5 h-3.5 text-brand-700 stroke-[3]"></i>
                             </div>
-                        </div>
-
-                        <!-- Value 3: Performance (Emerald) -->
-                        <div class="group relative p-6 rounded-2xl bg-gradient-to-br from-white/[0.03] to-transparent border border-white/5 hover:border-emerald-500/30 transition-all duration-300 hover:scale-[1.02] hover:bg-white/[0.05]">
-                            <div class="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-500 blur-xl"></div>
-                            
-                            <div class="relative flex items-start gap-5">
-                                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/10 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-emerald-500/20 transition-all duration-300">
-                                    <i data-lucide="trending-up" class="w-5 h-5 text-emerald-400" stroke-width="1.5"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-xl font-semibold text-[#F1F5F9] tracking-tight mb-2 group-hover:text-emerald-100 transition-colors">Performance</h3>
-                                    <p class="text-[#94A3B8] text-sm leading-relaxed max-w-sm">
-                                        We focus on real business impact, not vanity metrics.
-                                    </p>
-                                </div>
+                            <span class="text-zinc-700 text-sm font-medium leading-tight pt-0.5">Teams tired of manual cold outreach</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="mt-0.5 p-0.5 bg-brand-100 rounded-full flex-shrink-0">
+                                <i data-lucide="check" class="w-3.5 h-3.5 text-brand-700 stroke-[3]"></i>
                             </div>
-                        </div>
-                    </div>
+                            <span class="text-zinc-700 text-sm font-medium leading-tight pt-0.5">Focus on long-term relationships</span>
+                        </li>
+                    </ul>
                 </div>
 
+                <!-- Card 2: Creators -->
+                <div id="creators" class="bg-white border border-zinc-200 rounded-2xl p-10 lg:p-12 hover:border-brand-500/30 hover:shadow-xl hover:shadow-brand-500/5 transition-all duration-300 group flex flex-col h-full relative z-10">
+                     <div class="flex items-start justify-between mb-10">
+                        <div class="w-14 h-14 bg-zinc-50 border border-zinc-100 rounded-xl flex items-center justify-center text-zinc-900 group-hover:bg-brand-50 group-hover:text-brand-600 group-hover:border-brand-100 transition-colors">
+                            <i data-lucide="camera" class="w-7 h-7 stroke-[1.5]"></i>
+                        </div>
+                        <span class="text-xs font-semibold uppercase tracking-wide bg-zinc-100 text-zinc-600 px-3 py-1.5 rounded-full">Monetize</span>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold text-zinc-900 mb-4 tracking-tight">For Creators</h3>
+                    <p class="text-zinc-500 mb-10 leading-relaxed text-base">Access high-quality sponsorships without the back-and-forth negotiation headaches.</p>
+
+                    <ul class="space-y-5 mt-auto">
+                        <li class="flex items-start gap-4">
+                            <div class="mt-0.5 p-0.5 bg-brand-100 rounded-full flex-shrink-0">
+                                <i data-lucide="check" class="w-3.5 h-3.5 text-brand-700 stroke-[3]"></i>
+                            </div>
+                            <span class="text-zinc-700 text-sm font-medium leading-tight pt-0.5">Mid to high-quality content creators</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="mt-0.5 p-0.5 bg-brand-100 rounded-full flex-shrink-0">
+                                <i data-lucide="check" class="w-3.5 h-3.5 text-brand-700 stroke-[3]"></i>
+                            </div>
+                            <span class="text-zinc-700 text-sm font-medium leading-tight pt-0.5">Those who value fair pay &amp; clear terms</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="mt-0.5 p-0.5 bg-brand-100 rounded-full flex-shrink-0">
+                                <i data-lucide="check" class="w-3.5 h-3.5 text-brand-700 stroke-[3]"></i>
+                            </div>
+                            <span class="text-zinc-700 text-sm font-medium leading-tight pt-0.5">Looking for fewer, higher quality deals</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="py-20 px-6 border-t border-white/5 bg-[#050914] relative z-10">
-            <div class="max-w-7xl mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20 reveal">
-                    <div class="col-span-1 md:col-span-1 flex flex-col gap-4">
-                        <div class="flex items-center gap-2">
-                             <div class="relative w-5 h-5 flex items-center justify-center">
-                                <i data-lucide="link" class="text-[#4F8CFF] w-4 h-4" stroke-width="1.5"></i>
-                            </div>
-                            <span class="text-base font-medium tracking-tight text-[#F1F5F9]">Linkary</span>
-                        </div>
-                        <p class="text-xs text-[#94A3B8] max-w-xs leading-relaxed">
-                            The operating system for creator partnerships.
-                        </p>
-                    </div>
-                    
-                    <div>
-                        <h4 class="text-xs font-medium text-[#F1F5F9] mb-4 uppercase tracking-wider">Platform</h4>
-                        <ul class="space-y-3 text-xs text-[#94A3B8]">
-                            <li><a href="#" class="hover:text-[#F1F5F9] transition-colors">For Brands</a></li>
-                            <li><a href="#" class="hover:text-[#F1F5F9] transition-colors">For Creators</a></li>
-                            <li><a href="#" class="hover:text-[#F1F5F9] transition-colors">Pricing</a></li>
-                        </ul>
-                    </div>
+        <!-- Features / Why Section -->
+        <section id="how-it-works" class="max-w-7xl mx-auto px-6 mb-32 relative z-10">
+            <div class="mb-16">
+                <span class="text-brand-600 font-semibold text-xs tracking-widest uppercase mb-3 block">The Problem</span>
+                <h2 class="text-3xl md:text-4xl font-semibold text-zinc-900 tracking-tight mb-6">Why Linkary?</h2>
+                <p class="text-xl text-zinc-500 font-light max-w-2xl leading-relaxed">
+                    Influencer marketing is fragmented. Spreadsheets, DMs, and payment delays kill momentum. We built the infrastructure to fix it.
+                </p>
+            </div>
 
-                    <div>
-                        <h4 class="text-xs font-medium text-[#F1F5F9] mb-4 uppercase tracking-wider">Company</h4>
-                        <ul class="space-y-3 text-xs text-[#94A3B8]">
-                            <li><a href="#" class="hover:text-[#F1F5F9] transition-colors">Manifesto</a></li>
-                            <li><a href="#" class="hover:text-[#F1F5F9] transition-colors">Careers</a></li>
-                            <li><a href="#" class="hover:text-[#F1F5F9] transition-colors">Contact</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4 class="text-xs font-medium text-[#F1F5F9] mb-4 uppercase tracking-wider">Connect</h4>
-                        <div class="flex gap-4">
-                            <a href="#" class="text-[#94A3B8] hover:text-[#F1F5F9] transition-colors"><i data-lucide="twitter" class="w-4 h-4" stroke-width="1.5"></i></a>
-                            <a href="#" class="text-[#94A3B8] hover:text-[#F1F5F9] transition-colors"><i data-lucide="linkedin" class="w-4 h-4" stroke-width="1.5"></i></a>
-                            <a href="#" class="text-[#94A3B8] hover:text-[#F1F5F9] transition-colors"><i data-lucide="instagram" class="w-4 h-4" stroke-width="1.5"></i></a>
+            <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
+                <!-- Feature 1 -->
+                <div class="bg-white border border-zinc-200 p-8 rounded-xl hover:border-zinc-300 transition-all shadow-sm">
+                    <div class="flex items-start gap-6">
+                        <div class="w-12 h-12 flex-shrink-0 bg-zinc-50 border border-zinc-100 rounded-lg flex items-center justify-center text-zinc-900">
+                            <i data-lucide="layers" class="w-6 h-6 stroke-[1.5]"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-zinc-900 mb-2 tracking-tight">Unified Workflow</h3>
+                            <p class="text-zinc-500 text-base leading-relaxed">No more jumping between email, Excel, and PayPal. Handle everything in one workspace.</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-[#94A3B8]/50 reveal delay-100">
-                    <p>© 2024 Linkary Inc. All rights reserved.</p>
-                    <div class="flex gap-6 mt-4 md:mt-0">
-                        <a href="#" class="hover:text-[#94A3B8]">Privacy Policy</a>
-                        <a href="#" class="hover:text-[#94A3B8]">Terms of Service</a>
+                <!-- Feature 2 -->
+                <div class="bg-white border border-zinc-200 p-8 rounded-xl hover:border-zinc-300 transition-all shadow-sm">
+                    <div class="flex items-start gap-6">
+                        <div class="w-12 h-12 flex-shrink-0 bg-zinc-50 border border-zinc-100 rounded-lg flex items-center justify-center text-zinc-900">
+                            <i data-lucide="shield-check" class="w-6 h-6 stroke-[1.5]"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-zinc-900 mb-2 tracking-tight">Vetted Quality</h3>
+                            <p class="text-zinc-500 text-base leading-relaxed">We manually verify every creator and brand to ensure high-intent partnerships and eliminate fraud.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-white border border-zinc-200 p-8 rounded-xl hover:border-zinc-300 transition-all shadow-sm">
+                    <div class="flex items-start gap-6">
+                        <div class="w-12 h-12 flex-shrink-0 bg-zinc-50 border border-zinc-100 rounded-lg flex items-center justify-center text-zinc-900">
+                            <i data-lucide="zap" class="w-6 h-6 stroke-[1.5]"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-zinc-900 mb-2 tracking-tight">Fast Activation</h3>
+                            <p class="text-zinc-500 text-base leading-relaxed">From discovery to signed contract in hours, not weeks. Speed is our currency for growth.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="bg-white border border-zinc-200 p-8 rounded-xl hover:border-zinc-300 transition-all shadow-sm">
+                    <div class="flex items-start gap-6">
+                        <div class="w-12 h-12 flex-shrink-0 bg-zinc-50 border border-zinc-100 rounded-lg flex items-center justify-center text-zinc-900">
+                            <i data-lucide="credit-card" class="w-6 h-6 stroke-[1.5]"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-zinc-900 mb-2 tracking-tight">Secured Payments</h3>
+                            <p class="text-zinc-500 text-base leading-relaxed">Creators get paid on time. Brands get the content they paid for via our secure escrow system.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </footer>
+        </section>
+
+        <!-- REDESIGNED Mission Section -->
+        <section class="max-w-7xl mx-auto px-6 mb-32 relative z-10">
+            <!-- Aurora Background Container -->
+            <div class="aurora-bg border border-zinc-200 rounded-3xl p-8 md:p-12 lg:p-16 relative overflow-hidden shadow-[0_2px_40px_-10px_rgba(0,0,0,0.05)]">
+                
+                <div class="relative z-10 grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+                    
+                    <!-- Left: Content -->
+                    <div class="flex flex-col justify-center">
+                        <div class="flex items-center gap-2 mb-6">
+                            <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                            <span class="text-brand-600 text-xs font-semibold uppercase tracking-widest">Our Mission</span>
+                        </div>
+                        
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-semibold text-zinc-900 tracking-tight mb-8 leading-[1.1]">
+                            Making partnerships the <br> reliable growth channel.
+                        </h2>
+                        <p class="text-zinc-600 text-lg leading-relaxed mb-10 font-light">
+                            Linkary is a creator-brand partnership agency built for today's digital world. Connect great content with great companies without the friction.
+                        </p>
+                        
+                        <div class="grid grid-cols-3 gap-6 pt-8 border-t border-zinc-200/60">
+                            <div>
+                                <div class="text-3xl font-semibold tracking-tight text-zinc-900 mb-1">100+</div>
+                                <div class="text-zinc-500 text-sm font-medium">Partners</div>
+                            </div>
+                            <div>
+                                <div class="text-3xl font-semibold tracking-tight text-zinc-900 mb-1">500+</div>
+                                <div class="text-zinc-500 text-sm font-medium">Creators</div>
+                            </div>
+                            <div>
+                                <div class="text-3xl font-semibold tracking-tight text-zinc-900 mb-1">20+</div>
+                                <div class="text-zinc-500 text-sm font-medium">Countries</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Floating Cards Animation (Cool Feature) -->
+                    <div class="relative h-[400px] w-full flex items-center justify-center perspective-1000">
+                        <!-- Connecting Line visual behind cards -->
+                        <div class="absolute inset-0 flex justify-center">
+                            <div class="w-[1px] h-full bg-gradient-to-b from-transparent via-brand-200 to-transparent"></div>
+                        </div>
+
+                        <!-- Card 1: Top (Floating Slow) -->
+                        <div class="absolute top-0 w-64 glass-card p-6 rounded-2xl shadow-xl shadow-zinc-200/50 animate-float-slow z-10 border-l-4 border-l-brand-400">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="p-2 bg-brand-50 rounded-lg text-brand-600">
+                                    <i data-lucide="message-square" class="w-5 h-5"></i>
+                                </div>
+                                <h4 class="text-base font-semibold text-zinc-900">Clarity</h4>
+                            </div>
+                            <p class="text-zinc-500 text-xs leading-relaxed">Transparent communication and clear expectations for every deal.</p>
+                        </div>
+
+                        <!-- Card 2: Middle (Floating Medium) -->
+                        <div class="absolute top-28 -right-4 md:right-12 w-64 bg-white p-6 rounded-2xl shadow-xl shadow-zinc-200/50 animate-float-medium z-20 border border-zinc-100 border-l-4 border-l-brand-500">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="p-2 bg-brand-50 rounded-lg text-brand-600">
+                                    <i data-lucide="diamond" class="w-5 h-5"></i>
+                                </div>
+                                <h4 class="text-base font-semibold text-zinc-900">Quality</h4>
+                            </div>
+                            <p class="text-zinc-500 text-xs leading-relaxed">Meaningful partnerships over high volume spam. We filter the noise.</p>
+                            <!-- Visual indicator -->
+                            <div class="mt-4 h-1.5 w-full bg-zinc-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-brand-500 w-3/4 rounded-full"></div>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Bottom (Floating Fast) -->
+                        <div class="absolute top-60 w-64 glass-card p-6 rounded-2xl shadow-xl shadow-zinc-200/50 animate-float-fast z-30 border-l-4 border-l-brand-600">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="p-2 bg-brand-50 rounded-lg text-brand-600">
+                                    <i data-lucide="trending-up" class="w-5 h-5"></i>
+                                </div>
+                                <h4 class="text-base font-semibold text-zinc-900">Performance</h4>
+                            </div>
+                            <p class="text-zinc-500 text-xs leading-relaxed">Focus on real business impact and ROI, not just vanity metrics.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <!-- Logic -->
+    <!-- Footer -->
+    <footer class="bg-zinc-50 text-zinc-500 py-16 border-t border-zinc-200 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-12">
+                <!-- Brand -->
+                <div class="md:col-span-4">
+                    <a href="#" class="flex items-center gap-2 mb-4 text-zinc-900">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-brand-600">
+                             <path d="M10 13C10.4293 13.5739 10.9785 14.0494 11.6092 14.3934C12.24 14.7374 12.9373 14.9416 13.6525 14.9918C14.3677 15.0421 15.084 14.9372 15.7513 14.6845C16.4187 14.4318 17.0209 14.0374 17.516 13.528L19.808 11.236C20.8034 10.1983 21.3503 8.81229 21.3308 7.37766C21.3113 5.94303 20.7269 4.57242 19.7041 3.56191C18.6812 2.55141 17.2954 1.98064 15.8608 1.98064C14.4262 1.98064 13.0404 2.55141 12.0175 3.56191L10.925 4.647" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M14 11C13.5707 10.4261 13.0215 9.95062 12.3908 9.60656C11.76 9.26251 11.0627 9.05835 10.3475 9.00815C9.63231 8.95795 8.91599 9.06283 8.24867 9.31549C7.58136 9.56815 6.97906 9.96263 6.484 10.472L4.192 12.764C3.19661 13.8017 2.64972 15.1877 2.66922 16.6223C2.68871 18.057 3.2731 19.4276 4.29593 20.4381C5.31876 21.4486 6.70461 22.0194 8.13922 22.0194C9.57383 22.0194 10.9597 21.4486 11.9825 20.4381L13.075 19.353" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        <span class="font-semibold text-lg tracking-tight">Linkary</span>
+                    </a>
+                    <p class="text-zinc-500 text-sm font-light max-w-sm">
+                        The operating system for creator partnerships.
+                    </p>
+                </div>
+
+                <!-- Links -->
+                <div class="md:col-span-2">
+                    <h5 class="text-zinc-900 font-medium mb-4 text-sm">Platform</h5>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="hover:text-brand-600 transition-colors">For Brands</a></li>
+                        <li><a href="#" class="hover:text-brand-600 transition-colors">For Creators</a></li>
+                        <li><a href="#" class="hover:text-brand-600 transition-colors">Pricing</a></li>
+                    </ul>
+                </div>
+
+                <div class="md:col-span-2">
+                    <h5 class="text-zinc-900 font-medium mb-4 text-sm">Company</h5>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="hover:text-brand-600 transition-colors">Manifesto</a></li>
+                        <li><a href="#" class="hover:text-brand-600 transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-brand-600 transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="md:col-span-4 flex md:justify-end items-start gap-3">
+                     <a href="#" class="p-2 bg-white border border-zinc-200 rounded-full hover:border-zinc-300 text-zinc-600 transition-colors">
+                        <i data-lucide="twitter" class="w-4 h-4"></i>
+                    </a>
+                    <a href="#" class="p-2 bg-white border border-zinc-200 rounded-full hover:border-zinc-300 text-zinc-600 transition-colors">
+                        <i data-lucide="linkedin" class="w-4 h-4"></i>
+                    </a>
+                    <a href="#" class="p-2 bg-white border border-zinc-200 rounded-full hover:border-zinc-300 text-zinc-600 transition-colors">
+                        <i data-lucide="instagram" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="border-t border-zinc-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+                <div>© 2024 Linkary Inc. All rights reserved.</div>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-zinc-900 transition-colors">Privacy</a>
+                    <a href="#" class="hover:text-zinc-900 transition-colors">Terms</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Three.js Implementation -->
     <script>
-        // Initialize Lucide Icons
         lucide.createIcons();
 
-        // --- Intersection Observer for Scroll Animations ---
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: "0px 0px -50px 0px"
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // --- Three.js Network Globe Animation ---
+        // Scene Setup
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
-        
-        // Deep background fog 
-        scene.fog = new THREE.FogExp2(0x0B1220, 0.045);
+        // Light fog to blend particles into the white background
+        scene.fog = new THREE.FogExp2(0xF8FAFC, 0.05);
 
-        const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 25;
+        // Aspect ratio based on the container, not window
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+        camera.position.z = 4.5;
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setSize(width, height);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         container.appendChild(renderer.domElement);
 
-        // Group to hold all globe elements
-        const globeGroup = new THREE.Group();
-        scene.add(globeGroup);
-
-        // Base Geometry for the Globe
-        const geometry = new THREE.IcosahedronGeometry(11, 2);
-
-        // 1. The Wireframe Connections - INCREASED VISIBILITY HERE
-        const wireframeMaterial = new THREE.LineBasicMaterial({
-            color: 0x5DA9FF, // Lighter blue for better contrast against dark BG
-            transparent: true,
-            opacity: 0.35, // Significantly increased from 0.08
-            blending: THREE.AdditiveBlending // Makes lines "glow" where they overlap
-        });
-        const wireframe = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), wireframeMaterial);
-        globeGroup.add(wireframe);
-
-        // 2. The Nodes (Dots)
-        const getGlowTexture = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = 64; 
-            canvas.height = 64;
-            const ctx = canvas.getContext('2d');
+        // --- Custom Shader Material for "Brain" Particles ---
+        const vertexShader = `
+            uniform float uTime;
+            uniform float uNoiseFreq;
+            uniform float uNoiseAmp;
+            uniform float uDensity;
             
-            // Softer Gradient
-            const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-            gradient.addColorStop(0, 'rgba(200, 220, 255, 0.9)'); 
-            gradient.addColorStop(0.2, 'rgba(79, 140, 255, 0.8)'); 
-            gradient.addColorStop(0.5, 'rgba(79, 140, 255, 0.1)'); 
-            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            attribute float aRandom;
             
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, 64, 64);
+            varying vec3 vColor;
+            varying float vAlpha;
+
+            // Simplex noise function
+            vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+            vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+            float snoise(vec3 v) {
+                const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
+                const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
+                vec3 i  = floor(v + dot(v, C.yyy) );
+                vec3 x0 = v - i + dot(i, C.xxx) ;
+                vec3 g = step(x0.yzx, x0.xyz);
+                vec3 l = 1.0 - g;
+                vec3 i1 = min( g.xyz, l.zxy );
+                vec3 i2 = max( g.xyz, l.zxy );
+                vec3 x1 = x0 - i1 + 1.0 * C.xxx;
+                vec3 x2 = x0 - i2 + 2.0 * C.xxx;
+                vec3 x3 = x0 - 1.0 + 3.0 * C.xxx;
+                i = mod289(i);
+                vec4 p = permute( permute( permute(
+                            i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
+                        + i.y + vec4(0.0, i1.y, i2.y, 1.0 ))
+                        + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
+                float n_ = 1.0/7.0;
+                vec3  ns = n_ * D.wyz - D.xzx;
+                vec4 j = p - 49.0 * floor(p * ns.z *ns.z);
+                vec4 x_ = floor(j * ns.z);
+                vec4 y_ = floor(j - 7.0 * x_ );
+                vec4 x = x_ *ns.x + ns.yyyy;
+                vec4 y = y_ *ns.x + ns.yyyy;
+                vec4 h = 1.0 - abs(x) - abs(y);
+                vec4 b0 = vec4( x.xy, y.xy );
+                vec4 b1 = vec4( x.zw, y.zw );
+                vec4 s0 = floor(b0)*2.0 + 1.0;
+                vec4 s1 = floor(b1)*2.0 + 1.0;
+                vec4 sh = -step(h, vec4(0.0));
+                vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
+                vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
+                vec3 p0 = vec3(a0.xy,h.x);
+                vec3 p1 = vec3(a0.zw,h.y);
+                vec3 p2 = vec3(a1.xy,h.z);
+                vec3 p3 = vec3(a1.zw,h.w);
+                vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+                p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+                vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+                m = m * m;
+                return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3) ) );
+            }
+
+            void main() {
+                vec3 pos = position;
+                
+                // Noise displacement based on time
+                float noiseVal = snoise(vec3(pos.x * uNoiseFreq + uTime * 0.2, pos.y * uNoiseFreq, pos.z * uNoiseFreq));
+                
+                // Distort the sphere surface
+                pos += normal * noiseVal * uNoiseAmp;
+
+                vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                gl_Position = projectionMatrix * mvPosition;
+                
+                // Size based on depth
+                gl_PointSize = (4.0 * uDensity) * (1.0 / -mvPosition.z);
+                
+                // Colors
+                vec3 color1 = vec3(0.05, 0.65, 0.91); // Brand Blue
+                vec3 color2 = vec3(0.2, 0.2, 0.25); // Dark Grey
+                
+                vColor = mix(color2, color1, noiseVal * 0.5 + 0.5);
+                vAlpha = 0.8 + noiseVal * 0.2;
+            }
+        `;
+
+        const fragmentShader = `
+            varying vec3 vColor;
+            varying float vAlpha;
             
-            return new THREE.CanvasTexture(canvas);
+            void main() {
+                // Circle shape for point
+                float r = distance(gl_PointCoord, vec2(0.5, 0.5));
+                if (r > 0.5) discard;
+                
+                // Soft edge
+                float alpha = (1.0 - smoothstep(0.3, 0.5, r)) * vAlpha;
+                
+                gl_FragColor = vec4(vColor, alpha);
+            }
+        `;
+
+        // Geometry
+        const geometry = new THREE.IcosahedronGeometry(1.6, 50);
+        const count = geometry.attributes.position.count;
+        const randoms = new Float32Array(count);
+        for(let i = 0; i < count; i++) {
+            randoms[i] = Math.random();
+        }
+        geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 1));
+
+        const uniforms = {
+            uTime: { value: 0 },
+            uNoiseFreq: { value: 0.6 },
+            uNoiseAmp: { value: 0.6 },
+            uDensity: { value: 1.5 }
         };
 
-        const pointsMaterial = new THREE.PointsMaterial({
-            color: 0xffffff,
-            map: getGlowTexture(),
-            size: 0.5, 
-            sizeAttenuation: true,
+        const material = new THREE.ShaderMaterial({
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader,
+            uniforms: uniforms,
             transparent: true,
-            opacity: 0.6, 
             depthWrite: false,
-            blending: THREE.AdditiveBlending
+            blending: THREE.NormalBlending
         });
 
-        const pointsGeometry = new THREE.BufferGeometry();
-        pointsGeometry.setAttribute('position', geometry.getAttribute('position'));
-        const points = new THREE.Points(pointsGeometry, pointsMaterial);
-        globeGroup.add(points);
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
 
-        // 3. Inner Sphere (Occluder)
-        const fillMaterial = new THREE.MeshBasicMaterial({ 
-            color: 0x0B1220 
-        });
-        const fillSphere = new THREE.Mesh(geometry, fillMaterial);
-        fillSphere.scale.set(0.98, 0.98, 0.98); 
-        globeGroup.add(fillSphere);
+        // Interaction
+        let mouseX = 0;
+        let mouseY = 0;
 
-        // Ambient Particles
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = 200;
-        const posArray = new Float32Array(particlesCount * 3);
-        
-        for(let i = 0; i < particlesCount * 3; i++) {
-            posArray[i] = (Math.random() - 0.5) * 60; 
-        }
-        
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        const particlesMaterial = new THREE.PointsMaterial({
-            size: 0.15, 
-            map: getGlowTexture(),
-            transparent: true,
-            opacity: 0.2, 
-            blending: THREE.AdditiveBlending,
-            depthWrite: false
+        document.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            // Calculate mouse position relative to container
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Normalize only if mouse is roughly near the container
+            if(x > -200 && x < rect.width + 200 && y > -200 && y < rect.height + 200) {
+                 mouseX = (x / rect.width) * 2 - 1;
+                 mouseY = -(y / rect.height) * 2 + 1;
+            }
         });
-        const particleMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particleMesh);
 
-        // Animation Loop
-        let time = 0;
-        let scrollY = 0;
-        window.addEventListener('scroll', () => {
-            scrollY = window.scrollY;
-        });
+        const clock = new THREE.Clock();
 
         function animate() {
             requestAnimationFrame(animate);
-            time += 0.002;
+            const elapsedTime = clock.getElapsedTime();
 
-            globeGroup.rotation.y += 0.0005;
-            globeGroup.rotation.x = Math.sin(time * 0.5) * 0.1; 
+            uniforms.uTime.value = elapsedTime * 0.2; // Fixed speed
 
-            const targetRotation = scrollY * 0.0005;
-            globeGroup.rotation.y += targetRotation * 0.05;
-            
-            const scale = 1 + Math.sin(time * 2) * 0.01;
-            globeGroup.scale.set(scale, scale, scale);
+            // Rotate Object
+            particles.rotation.y += 0.002;
+            particles.rotation.x += 0.001;
 
-            particleMesh.rotation.y = -time * 0.1;
+            // Subtle interaction
+            particles.rotation.y += 0.02 * (mouseX - particles.rotation.y);
+            particles.rotation.x += 0.02 * (mouseY - particles.rotation.x);
 
             renderer.render(scene, camera);
         }
-
         animate();
 
+        // Handle Window Resize
         window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
+            const newWidth = container.clientWidth;
+            const newHeight = container.clientHeight;
+            
+            camera.aspect = newWidth / newHeight;
             camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setSize(newWidth, newHeight);
         });
-        
-    </script>
 
+    </script>
 
 </body></html>
